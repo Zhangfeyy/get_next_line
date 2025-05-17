@@ -9,5 +9,10 @@
 /*   Updated: 2025/05/15 22:17:46 by fzhang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#ifndef GET_NEXT_LINE.H
+# define  GET_NEXT_LINE.H
 
+#include "unistd.h"
+
+#endif
 
