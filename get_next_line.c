@@ -11,29 +11,45 @@
 /* ************************************************************************** */
 #include "get_next_line.h"
 
-char	*read_lines(int fd)
+//read lines till a new line appears
+char	*read_file(unsigned char *temp, int fd)
 {
-	unsigned *buffer;
-	size_t bytes_read = 1;
+	unsigned char *buffer;
+	unsigned char *ttemp;
+	size_t length;
 
 	// create a buffer
-	buffer = (unsigned char*)ft_calloc(BUFFER_SIZE + 1);
+	buffer = (unsigned char*)ft_calloc(BUFFER_SIZE + 1); // treat it as a string
 	if(!buffer)
 		return(NULL);
-	while(!ft_strchr(temp, '\n') && bytes_read > 1)
+	temp = buffer;
+	while(!ft_strchr(temp, '\n'))
 	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if(bytes_read == -1)
+		length = read(fd, buffer, BUFFER_SIZE);
+		if(length == -1)
 		{
 			free(buffer);
 			return (NULL);
 		}
-		buffer[bytes_read] = '\0';
+		buffer[length] = '\0';
 		temp = ft_strjoin(temp, buffer);
+		if(length == 0)
+		{
+			free(buffer);
+			return(temp);
+		}
 	}
 	free(buffer);
 	return (temp);
 }
+
+char *read_line(unsigned char *temp)
+{
+	if(!temp)
+		return(NULL);
+	return(temp);
+}
+
 
 
 
@@ -44,9 +60,10 @@ char	*get_next_line(int fd)
 
 	if(BUFFER_SIZE <= 0 || fd < 0) // 0 standard input(keyboard, terminal), 1 standard output, 2 std error
 		return (NULL);
-	temp = read_lines(fd, temp);
+	temp = read_file(fd, temp);
 	if(!temp)
 		return (NULL);
-	line = extract_line(temp);
-	temp = clean_kine
+	temp = read_line(temp);
+	clean(temp);
+	return(temp);
 }

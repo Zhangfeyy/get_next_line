@@ -13,8 +13,8 @@
 # define  GET_NEXT_LINE_H
 
 // 定义宏文件
-#ifdef BUFFER_SIZE
-# define BUFFER_SIZE 42
+#ifndef BUFFER_SIZE
+#define BUFFER_SIZE 42
 #endif
 
 #include "unistd.h"
