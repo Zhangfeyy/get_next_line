@@ -11,37 +11,42 @@
 /* ************************************************************************** */
 #include "get_next_line.h"
 
-char	*get_next_line(int fd)
+char	*read_lines(int fd)
 {
-	static unsigned char *buffer;
-	unsigned char *sentence;
-	size_t	length;
-	size_t	count;
+	unsigned *buffer;
+	size_t bytes_read = 1;
 
-	buffer = (unsigned char*)ft_calloc(BUFFER_SIZE);
+	// create a buffer
+	buffer = (unsigned char*)ft_calloc(BUFFER_SIZE + 1);
 	if(!buffer)
 		return(NULL);
-	length = read(fd, buffer, BUFFER_SIZE);
-	if(length == -1)
-		return(NULL);
-	if(length > 1)
+	while(!ft_strchr(temp, '\n') && bytes_read > 1)
 	{
-		sentence = (unsigned char *)ft_calloc(length);
-		if(!sentence)
-			return (NULL);
-		count = 0;
-		while(*buffer)
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if(bytes_read == -1)
 		{
-			
+			free(buffer);
+			return (NULL);
 		}
+		buffer[bytes_read] = '\0';
+		temp = ft_strjoin(temp, buffer);
 	}
+	free(buffer);
+	return (temp);
+}
 
 
 
-	if(length == 0)
-		
+char	*get_next_line(int fd)
+{
+	static unsigned char *temp;
+	unsigned char *line;
 
-
-
-	
+	if(BUFFER_SIZE <= 0 || fd < 0) // 0 standard input(keyboard, terminal), 1 standard output, 2 std error
+		return (NULL);
+	temp = read_lines(fd, temp);
+	if(!temp)
+		return (NULL);
+	line = extract_line(temp);
+	temp = clean_kine
 }
