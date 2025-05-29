@@ -48,7 +48,6 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	}
 	join[i + j] = '\0';
 	free(s1);
-	free(s2);
 	return (join);
 }
 

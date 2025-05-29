@@ -27,10 +27,17 @@ static char	*read_file(char *temp, int fd)
 		temp = ft_strjoin_free(temp, buffer);
 		//buffer !0? not necessary already calloc
 		if(length == -1 || !temp)
+		{
+			free(buffer);
 			return (NULL);
+		}
 		if(length == 0)
+		{
+			free(buffer);
 			return(temp);
+		}
 	}
+	free(buffer);
 	return (temp);
 }
 
