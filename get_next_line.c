@@ -12,58 +12,85 @@
 #include "get_next_line.h"
 
 //read lines till a new line appears
-char	*read_file(unsigned char *temp, int fd)
+static char	*read_file(char *temp, int fd)
 {
-	unsigned char *buffer;
-	unsigned char *ttemp;
+	char *buffer;
 	size_t length;
 
-	// create a buffer
-	buffer = (unsigned char*)ft_calloc(BUFFER_SIZE + 1); // treat it as a string
+	//how to initialize temp???? also a check for temp ? = NULL
+	buffer = (char*)ft_calloc(BUFFER_SIZE + 1); // treat it as a string
 	if(!buffer)
 		return(NULL);
-	temp = buffer;
 	while(!ft_strchr(temp, '\n'))
 	{
 		length = read(fd, buffer, BUFFER_SIZE);
-		if(length == -1)
-		{
-			free(buffer);
+		temp = ft_strjoin_free(temp, buffer);
+		//buffer !0? not necessary already calloc
+		if(length == -1 || !temp)
 			return (NULL);
-		}
-		buffer[length] = '\0';
-		temp = ft_strjoin(temp, buffer);
 		if(length == 0)
-		{
-			free(buffer);
 			return(temp);
-		}
 	}
-	free(buffer);
 	return (temp);
 }
 
-char *read_line(unsigned char *temp)
+char *read_line(char *temp)
 {
+	size_t	i;
+	char *ttemp;
+	int	check;
+
 	if(!temp)
 		return(NULL);
-	return(temp);
+	i = 0;
+	check = 1;
+	while(temp[i] && temp[i] != '\n')
+		i++;
+	ttemp = (char *)ft_calloc(i + 1);
+	if(!temp[i])
+		check = 0;
+	if(!ttemp)
+		return(NULL);
+	while(i >= 0)
+	{
+		ttemp[i] = temp[i];
+		temp[i] = '\0';
+		i--;
+	}
+	clean_temp(temp, &check);
+	return(ttemp);
 }
 
+void	clean_temp(char *temp, int *check)
+{
+	size_t	i;
+	size_t	j;
 
-
+	if(!check)
+		return;
+	i = 0;
+	while (!temp[i])
+		i++;
+	j = i;
+	while(temp[i])
+	{
+		temp[i - j] = temp[i];
+		temp[i] = '\0';
+		i++;
+	}
+}
 
 char	*get_next_line(int fd)
 {
-	static unsigned char *temp;
-	unsigned char *line;
+	static char *temp;
+	//  static int i = 4;  // only to initialize this way
+	char *line;
 
 	if(BUFFER_SIZE <= 0 || fd < 0) // 0 standard input(keyboard, terminal), 1 standard output, 2 std error
 		return (NULL);
 	temp = read_file(fd, temp);
 	if(!temp)
 		return (NULL);
-	temp = read_line(temp);
-	clean(temp);
-	return(temp);
+	line = read_line(temp);
+	return(line);
 }
