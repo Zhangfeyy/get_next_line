@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 #include "get_next_line.h"
 
+//temp check
 //read lines till a new line appears
 static char	*read_file(char *temp, int fd)
 {
@@ -18,13 +19,13 @@ static char	*read_file(char *temp, int fd)
 	size_t length;
 
 	//how to initialize temp???? also a check for temp ? = NULL
-	buffer = (char*)ft_calloc(BUFFER_SIZE + 1); // treat it as a string
-	if(!buffer)
-		return(NULL);
+	//also ft_chr must handle the case of null pointer
 	while(!ft_strchr(temp, '\n'))
 	{
+		buffer = (char*)ft_calloc(BUFFER_SIZE + 1, 1); // treat it as a string
+		if(!buffer)
+			return(NULL);
 		length = read(fd, buffer, BUFFER_SIZE);
-		temp = ft_strjoin_free(temp, buffer);
 		//buffer !0? not necessary already calloc
 		if(length == -1 || !temp)
 		{
@@ -36,8 +37,9 @@ static char	*read_file(char *temp, int fd)
 			free(buffer);
 			return(temp);
 		}
+		temp = ft_strjoin_free(temp, buffer);
+		free(buffer);
 	}
-	free(buffer);
 	return (temp);
 }
 
@@ -45,45 +47,47 @@ char *read_line(char *temp)
 {
 	size_t	i;
 	char *ttemp;
-	int	check;
 
 	if(!temp)
 		return(NULL);
 	i = 0;
-	check = 1;
 	while(temp[i] && temp[i] != '\n')
 		i++;
-	ttemp = (char *)ft_calloc(i + 1);
-	if(!temp[i])
-		check = 0;
+	if(temp[i] == '\n')
+		i++;
+	ttemp = (char *)ft_calloc(i + 1, 1);
 	if(!ttemp)
 		return(NULL);
-	while(i >= 0)
+	while(i > 0)
 	{
-		ttemp[i] = temp[i];
-		temp[i] = '\0';
+		ttemp[i-1] = temp[i-1];
 		i--;
 	}
-	clean_temp(temp, &check);
 	return(ttemp);
 }
 
-void	clean_temp(char *temp, int *check)
+//13:00
+void	update_temp(char *temp)
 {
 	size_t	i;
 	size_t	j;
 
-	if(!check)
-		return;
 	i = 0;
-	while (!temp[i])
+	j = 0;
+	while(temp[i] && temp[i] != '\n')
 		i++;
-	j = i;
+	if(temp[i] == '\n')
+		i++;
 	while(temp[i])
 	{
-		temp[i - j] = temp[i];
-		temp[i] = '\0';
+		temp[j] = temp[i];
+		j++;
 		i++;
+	}
+	while(temp[j])
+	{
+		temp[j] = 0;
+		j++;
 	}
 }
 
@@ -93,11 +97,15 @@ char	*get_next_line(int fd)
 	//  static int i = 4;  // only to initialize this way
 	char *line;
 
+	if(!temp)
+		temp = (char *)ft_calloc(1, 1);
 	if(BUFFER_SIZE <= 0 || fd < 0) // 0 standard input(keyboard, terminal), 1 standard output, 2 std error
 		return (NULL);
 	temp = read_file(fd, temp);
 	if(!temp)
 		return (NULL);
 	line = read_line(temp);
+	update_temp(temp);
+	
 	return(line);
 }
