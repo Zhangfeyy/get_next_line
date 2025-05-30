@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+static size_t	ft_strlen(const char *str)
 {
 	int	len;
 
@@ -42,10 +42,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	}
 	j = 0;
 	while (s2[j])
-	{
-		join[i + j] = s2[j];
-		j++;
-	}
+		join[i + j] = s2[j++];
 	join[i + j] = '\0';
 	free(s1);
 	return (join);
@@ -60,8 +57,7 @@ void	*ft_memset(void *s, int c, size_t n)
 	count = 0;
 	while (count < n)
 	{
-		copy[count] = c;
-		count++;
+		copy[count++] = c;
 	}
 	return (s);
 }
@@ -79,6 +75,25 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (copy);
 }
 
+char	*ft_strrchr(const char *s, int c)
+{
+	char	*copy;
+
+	if(!s)
+		return (NULL);
+	copy = NULL;
+	while (*s)
+	{
+		if (*s == (unsigned char)c)
+			copy = (char *)s;
+		s++;
+	}
+	if ((unsigned char)c == 0)
+		copy = (char *)s;
+	if (copy)
+		return (copy);
+	return (NULL); //E- if c is not founded, return a NULL pointer
+}
 
 
 
