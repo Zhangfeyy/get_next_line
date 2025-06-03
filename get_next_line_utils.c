@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fzhang <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 22:17:32 by fzhang            #+#    #+#             */
-/*   Updated: 2025/05/15 22:17:33 by fzhang           ###   ########.fr       */
+/*   Updated: 2025/06/03 19:05:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "get_next_line.h"
 
 size_t	ft_strlen(const char *str)
@@ -45,7 +46,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 {
 	void	*copy;
 
-	if (nmemb * size > 0 && (SIZE_MAX / size < nmemb))
+	if (nmemb * size > 0 && ((size_t)-1) / size < nmemb)
 		return (NULL);
 	copy = (void *)malloc(nmemb * size);
 	if (!copy)
@@ -74,12 +75,15 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	}
 	j = 0;
 	while (s2[j])
-		join[i + j] = s2[j++];
+	{
+		join[i + j] = s2[j];
+		j++;
+	}
 	free(s1);
 	return (join);
 }
 
-char *ft_strchr(const char *s, int c)
+unsigned char *ft_strchr(const char *s, int c)
 {
     size_t i = 0;
 
@@ -92,6 +96,6 @@ char *ft_strchr(const char *s, int c)
         i++;
     }
     if ((unsigned char)c == '\0') // Check for null terminator if c is 0
-        return ((char *)&s[i]);
+        return ((unsigned char *)&s[i]);
     return (NULL); // Character not found
 }

@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fzhang <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 22:17:45 by fzhang            #+#    #+#             */
-/*   Updated: 2025/05/15 22:17:46 by fzhang           ###   ########.fr       */
+/*   Updated: 2025/06/03 19:05:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef GET_NEXT_LINE_H
 # define  GET_NEXT_LINE_H
 
@@ -21,7 +22,7 @@
 #include "stdlib.h"
 
 char	*get_next_line(int fd);
-char	*ft_strchr(const char *s, int c);
+unsigned char	*ft_strchr(const char *s, int c);
 void	*ft_calloc(size_t nmemb, size_t size);
 char	*ft_strjoin_free(char *s1, char *s2);
 size_t ft_strlen(const char *str);

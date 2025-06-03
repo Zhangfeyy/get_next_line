@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fzhang <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 22:17:11 by fzhang            #+#    #+#             */
-/*   Updated: 2025/05/15 22:17:13 by fzhang           ###   ########.fr       */
+/*   Updated: 2025/06/03 19:39:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "get_next_line.h"
 
+#include "get_next_line.h"
 //temp check
 //read lines till a new line appears
 static char	*read_file(char *temp, int fd)
@@ -113,11 +113,17 @@ char	*get_next_line(int fd)
 		temp = (char *)ft_calloc(1, 1);
 	if(!temp)
 		return (NULL);
-	temp = read_file(fd, temp);
+	temp = read_file(temp,fd);
 	//after reading the file, temp should be NULL(error case)/0/valued
 	//handle the null case (error case)
 	if(!temp)
 		return (NULL);
+	if (temp[0] == '\0')
+	{
+    		free(temp);
+    		temp = NULL;
+    		return (NULL);
+	}
 	//temp can only be 0 or valued here
 	line = read_line(temp);
 	temp = update_temp(temp);
