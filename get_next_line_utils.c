@@ -58,6 +58,8 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	unsigned int	j;
 	char			*join;
 
+    	if (!s1 && !s2)
+        	return (NULL);
 	join = (char *)ft_calloc((ft_strlen((char *)s1)
 				+ ft_strlen((char *)s2) + 1), sizeof(char));
 	if (!join)
@@ -75,22 +77,19 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	return (join);
 }
 
-char	*ft_strchr(const char *s, int c)
+char *ft_strchr(const char *s, int c)
 {
-	char	*copy;
+    size_t i = 0;
 
-	if(!s)
-		return (NULL);
-	copy = NULL;
-	while (*s)
-	{
-		if (*s == (unsigned char)c)
-			copy = (char *)s;
-		s++;
-	}
-	if ((unsigned char)c == 0)
-		copy = (char *)s;
-	if (copy != NULL)
-		return (copy);
-	return (NULL); //E- if c is not founded, return a NULL pointer
+    if (!s)
+        return (NULL);
+    while (s[i] != '\0')
+    {
+        if (s[i] == (unsigned char)c)
+            return ((unsigned char *)&s[i]); // Return pointer to first match
+        i++;
+    }
+    if ((unsigned char)c == '\0') // Check for null terminator if c is 0
+        return ((char *)&s[i]);
+    return (NULL); // Character not found
 }
