@@ -46,7 +46,7 @@ static char	*read_file(char *temp, int fd)
 	return (temp);
 }
 
-char *read_line(char *temp)
+static char *read_line(char *temp)
 {
 	size_t	i;
 	char *ttemp;
@@ -67,7 +67,7 @@ char *read_line(char *temp)
 	return(ttemp);
 }
 
-void	update_temp(char *temp)
+static void	update_temp(char *temp)
 {
 	size_t	i;
 	size_t	j;

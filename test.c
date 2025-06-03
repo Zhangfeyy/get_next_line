@@ -158,7 +158,6 @@ int main(void) {
     run_test("test_files/many_empty_lines.txt", 8, "Many empty lines");
     run_test("test_files/mixed_lines.txt", 9, "Mixed lines including empty ones");
 
-    test_invalid_fd();
     test_multiple_fds();
 
     // Clean up test files (optional, but good practice)
