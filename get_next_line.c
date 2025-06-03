@@ -16,13 +16,16 @@
 static char	*read_file(char *temp, int fd)
 {
 	char *buffer;
-	size_t length;
+	ssize_t length;
 
 	//how to initialize temp???? also a check for temp ? = NULL
 	//*ft_chr must handle the case of null pointer! if null, should return an abnormal value and end the loop
 	buffer = (char*)ft_calloc(BUFFER_SIZE + 1, 1); // treat it as a string
 	if(!buffer)
+	{
+		free(temp);
 		return(NULL);
+	}
 	while(!ft_strchr(temp, '\n'))
 	{
 		length = read(fd, buffer, BUFFER_SIZE);
@@ -56,9 +59,11 @@ static char *read_line(char *temp)
 		i++;
 	if(temp[i] == '\n')
 		i++;
+	if(!i)
+		return(NULL);
 	ttemp = (char *)ft_calloc(i + 1, 1);
 	if(!ttemp)
-			return(NULL);
+		return(NULL);
 	while(i > 0)
 	{
 		ttemp[i-1] = temp[i-1];
