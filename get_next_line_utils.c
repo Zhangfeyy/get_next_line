@@ -77,6 +77,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 		join[i + j] = s2[j++];
 	free(s1);
 	return (join);
+}
 
 char *ft_strchr(const char *s, int c)
 {
