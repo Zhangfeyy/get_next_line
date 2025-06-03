@@ -11,11 +11,13 @@
 /* ************************************************************************** */
 #include "get_next_line.h"
 
-static size_t	ft_strlen(const char *str)
+size_t	ft_strlen(const char *str)
 {
 	int	len;
 
 	len = 0;
+	if(!str)
+		return (len);
 	while (*str != '\0')
 	{
 		len++;
@@ -41,14 +43,14 @@ void	*ft_memset(void *s, int c, size_t n)
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
-	unsigned char	*copy;
+	void	*copy;
 
-	if (nmemb * size > 0 && (nmemb * size / size != nmemb))
+	if (nmemb * size > 0 && (SIZE_MAX / size < nmemb))
 		return (NULL);
 	copy = (void *)malloc(nmemb * size);
 	if (!copy)
 		return (NULL);
-	copy = ft_memset(copy, 0, nmemb * size);
+	ft_memset(copy, 0, nmemb * size);
 	return (copy);
 }
 
@@ -58,7 +60,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	unsigned int	j;
 	char			*join;
 
-    	if (!s1 && !s2)
+    	if (!s1 || !s2)
         	return (NULL);
 	join = (char *)ft_calloc((ft_strlen((char *)s1)
 				+ ft_strlen((char *)s2) + 1), sizeof(char));
@@ -75,7 +77,6 @@ char	*ft_strjoin_free(char *s1, char *s2)
 		join[i + j] = s2[j++];
 	free(s1);
 	return (join);
-}
 
 char *ft_strchr(const char *s, int c)
 {

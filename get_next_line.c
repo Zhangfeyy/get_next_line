@@ -30,7 +30,7 @@ static char	*read_file(char *temp, int fd)
 	{
 		length = read(fd, buffer, BUFFER_SIZE);
 		//buffer !0? not necessary already calloc
-		if(length == -1 || !temp)
+		if(length == -1)
 		{
 			free(buffer);
 			free(temp);
@@ -43,7 +43,12 @@ static char	*read_file(char *temp, int fd)
 		}
 		buffer[length] = '\0'; //to manually "clear" the buffer for the next call
 		temp = ft_strjoin_free(temp, buffer);
-		// also need a check for the new temp, here done by ft_strchr
+		// also need a check for the new temp
+		if(!temp)
+		{
+			free(buffer);
+			return (NULL);
+		}
 	}
 	free(buffer);
 	return (temp);
@@ -55,12 +60,12 @@ static char *read_line(char *temp)
 	char *ttemp;
 
 	i = 0;
+	if (temp[i] == '\0') // No stash or empty stash
+        	return (NULL);
 	while(temp[i] && temp[i] != '\n')
 		i++;
 	if(temp[i] == '\n')
 		i++;
-	if(!i)
-		return(NULL);
 	ttemp = (char *)ft_calloc(i + 1, 1);
 	if(!ttemp)
 		return(NULL);
@@ -72,21 +77,28 @@ static char *read_line(char *temp)
 	return(ttemp);
 }
 
-static void	update_temp(char *temp)
+static char	*update_temp(char *temp)
 {
 	size_t	i;
 	size_t	j;
+	char *new_temp;
 
 	i = 0;
-	j = 0;
 	while(temp[i] && temp[i] != '\n')
 		i++;
 	if(temp[i] == '\n')
 		i++;
+	new_temp = (char *)ft_calloc(ft_strlen(temp) - i + 1, 1);
+	if(!new_temp)
+	{
+		free(temp);
+		return (NULL);
+	}
+	j = 0;
 	while(temp[i])
-		temp[j++] = temp[i++];
-	while(temp[j])
-		temp[j++] = '\0';
+		new_temp[j++] = temp[i++];
+	free(temp);
+	return (new_temp);
 }
 
 char	*get_next_line(int fd)
@@ -99,6 +111,8 @@ char	*get_next_line(int fd)
 		return (NULL);
 	if(!temp)
 		temp = (char *)ft_calloc(1, 1);
+	if(!temp)
+		return (NULL);
 	temp = read_file(fd, temp);
 	//after reading the file, temp should be NULL(error case)/0/valued
 	//handle the null case (error case)
@@ -106,7 +120,6 @@ char	*get_next_line(int fd)
 		return (NULL);
 	//temp can only be 0 or valued here
 	line = read_line(temp);
-	update_temp(temp);
-	
+	temp = update_temp(temp);
 	return(line);
 }
