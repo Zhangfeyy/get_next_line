@@ -15,6 +15,26 @@ void create_test_file(const char *filename, const char *content)
 		perror("error creating test file");
 		exit(EXIT_FAILURE);
 	}
+	if (content && *content)
+    {
+        ssize_t len = 0;
+        const char *ptr = content;
+        while (content[len])
+            len++;
+        while (len > 0)
+        {
+            ssize_t written = write(fd, ptr, len);
+            if (written <= 0)
+            {
+                perror("error writing to test file");
+                close(fd);
+                exit(EXIT_FAILURE);
+            }
+            ptr += written;
+            len -= written;
+        }
+    }
+    close(fd);
 }
 
 void run_test(const char *filename,int test_num, const char *description)
